@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple pill icon for notifications -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M4.22,11.29l6.07,-6.07c1.56,-1.56 4.09,-1.56 5.66,0l2.83,2.83c1.56,1.56 1.56,4.09 0,5.66l-6.07,6.07c-1.56,1.56 -4.09,1.56 -5.66,0L4.22,16.95c-1.56,-1.57 -1.56,-4.1 0,-5.66zM5.64,12.71l2.83,2.83 5.19,-5.2 -2.83,-2.83c-0.78,-0.78 -2.05,-0.78 -2.83,0l-2.36,2.37c-0.78,0.78 -0.78,2.05 0,2.83z"/>
+</vector>

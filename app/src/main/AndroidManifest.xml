@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ── Alarm & Notifications ───────────────────────────────────── -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- ── Driving Mode (Activity Recognition) ─────────────────────── -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+
+    <!-- ── Wake Lock (keep CPU alive for alarm delivery) ───────────── -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:name=".MedicineTrackerApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MedicineTracker">
+
+        <!-- ── Main Activity ─────────────────────────────────────────── -->
+        <activity
+            android:name=".presentation.ui.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- ── Alarm Receiver (fires exact alarm) ────────────────────── -->
+        <receiver
+            android:name=".service.alarm.AlarmReceiver"
+            android:exported="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.familyhealth.medicinetracker.ACTION_DOSE_ALARM" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ── Nag Receiver (fires the 5-min repeat alarm) ───────────── -->
+        <receiver
+            android:name=".service.alarm.NagReceiver"
+            android:exported="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.familyhealth.medicinetracker.ACTION_NAG_ALARM" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ── Notification Action Receiver ──────────────────────────── -->
+        <receiver
+            android:name=".service.notification.NotificationActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.familyhealth.medicinetracker.ACTION_TAKEN" />
+                <action android:name="com.familyhealth.medicinetracker.ACTION_SKIP" />
+                <action android:name="com.familyhealth.medicinetracker.ACTION_MUTE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ── Boot Receiver (restore alarms after reboot) ───────────── -->
+        <receiver
+            android:name=".service.alarm.BootReceiver"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ── Driving Mode Service ───────────────────────────────────── -->
+        <service
+            android:name=".service.driving.DrivingModeService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
+
+        <!-- ── WorkManager initializer ───────────────────────────────── -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge"
+            xmlns:tools="http://schemas.android.com/tools">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
+    </application>
+</manifest>
